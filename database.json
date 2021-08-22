@@ -6,6 +6,12 @@
     "user": "postgres",
     "password": "p0stgres"
   },
+  "test_create": {
+    "driver": "pg",
+    "host": "127.0.0.1",
+    "user": "postgres",
+    "password": "p0stgres"
+  },
   "test": {
     "driver": "pg",
     "host": "127.0.0.1",
