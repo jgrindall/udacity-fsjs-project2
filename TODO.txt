@@ -9,7 +9,7 @@ Products - GET show (id) (NO TOKEN)
 Products - POST create (...) (TOKEN)
 Products - GET showByCategory(category_id)
 
-Product: id, name, prive, category
+Product: id, name, price, category
 
 ----
 
