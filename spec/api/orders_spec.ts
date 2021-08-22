@@ -1,7 +1,6 @@
 import supertest from "supertest";
 import app from "../../src/server";
 import {Order} from "../../src/models/order";
-import express from "express";
 import {Users, UsersStore} from "../../src/models/users";
 
 const request = supertest(app);

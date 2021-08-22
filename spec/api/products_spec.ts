@@ -1,8 +1,6 @@
 import supertest from "supertest";
 import app from "../../src/server";
 import {Product} from "../../src/models/product";
-import express from "express";
-
 const request = supertest(app);
 
 describe("Test endpoint success", async () => {

@@ -1,5 +1,4 @@
 import {OrderStore, Order} from "../../src/models/order";
-import {Product, ProductStore} from "../../src/models/product";
 import {Users, UsersStore} from "../../src/models/users";
 
 const orderStore = new OrderStore();
