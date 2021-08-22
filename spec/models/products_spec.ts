@@ -1,16 +1,20 @@
 import {Product, ProductStore} from "../../src/models/product";
-
-const productStore = new ProductStore();
+import {UsersStore} from "../../src/models/users";
 
 describe("Test products store - basic functionality", ()=>{
+
+    const productStore = new ProductStore();
+    const userStore = new UsersStore();
 
     let productIdsCreated:number[] = [];
 
     afterAll(async()=>{
+        await userStore.deleteAll();
         return await productStore.deleteAll();
     });
 
     beforeAll(async()=>{
+        await userStore.deleteAll();
         return await productStore.deleteAll();
     });
 

@@ -1,10 +1,25 @@
 import supertest from "supertest";
 import app from "../../src/server";
-import {Users} from "../../src/models/users";
+import {Users, UsersStore} from "../../src/models/users";
+import {ProductStore} from "../../src/models/product";
 
 const request = supertest(app);
 
 describe("Test endpoint success", async () => {
+
+    const userStore = new UsersStore();
+    const productStore = new ProductStore();
+
+    afterAll(async()=>{
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
+    });
+
+    beforeAll(async()=>{
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
+    });
+
 
     let idCreated: number;
 

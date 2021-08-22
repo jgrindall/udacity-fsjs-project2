@@ -1,9 +1,23 @@
 import supertest from "supertest";
 import app from "../../src/server";
-import {Product} from "../../src/models/product";
+import {Product, ProductStore} from "../../src/models/product";
+import {UsersStore} from "../../src/models/users";
 const request = supertest(app);
 
 describe("Test endpoint success", async () => {
+
+    const userStore = new UsersStore();
+    const productStore = new ProductStore();
+
+    afterAll(async()=>{
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
+    });
+
+    beforeAll(async()=>{
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
+    });
 
     it("test list", async () => {
         const response = await request.get("/api/products");
@@ -14,18 +28,17 @@ describe("Test endpoint success", async () => {
     let idCreated: number;
 
     it("test create", async () => {
-        const product:Omit<Product, "id"> = {
-            category:"home",
-            name:"name1",
-            price:10
-        };
         const response = await request
             .post("/api/products")
-            .send(product);
+            .send({
+                category:"home",
+                name:"name1",
+                price:10
+            });
         expect(response.status).toBe(200);
         const product2:Product = (response.body as Product);
         expect(product2).toBeTruthy();
-        expect(product2.name).toEqual(product.name);
+        expect(product2.name).toEqual("name1");
 
         idCreated = product2.id;
 
@@ -34,7 +47,7 @@ describe("Test endpoint success", async () => {
         const products = (response2.body as Product[]);
         expect(products).toBeTruthy();
         expect(products.length).toEqual(1);
-        expect(products[0].name).toEqual(product.name);
+        expect(products[0].name).toEqual("name1");
     });
 
     it("test get by id", async () => {

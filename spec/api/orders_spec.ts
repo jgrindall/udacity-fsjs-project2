@@ -2,9 +2,11 @@ import supertest from "supertest";
 import app from "../../src/server";
 import {Order} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
+import {ProductStore} from "../../src/models/product";
 
 const request = supertest(app);
 const userStore = new UsersStore();
+const productStore = new ProductStore();
 
 let userIdCreated: number;
 let orderIdCreated: number;
@@ -12,11 +14,13 @@ let orderIdCreated: number;
 describe("Test endpoint success", async () => {
 
     afterAll(async()=>{
-        return await userStore.deleteAll();
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
     });
 
     beforeAll(async()=>{
-        return await userStore.deleteAll();
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
     });
 
     it("test list", async () => {
@@ -45,7 +49,7 @@ describe("Test endpoint success", async () => {
 
         const order:Omit<Order, "id"> = {
             status:"active",
-            user_id:1
+            user_id:userIdCreated
         };
         const response2 = await request
             .post("/api/orders")

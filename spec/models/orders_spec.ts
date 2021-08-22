@@ -1,17 +1,21 @@
 import {OrderStore, Order} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
-
-const orderStore = new OrderStore();
-const userStore = new UsersStore();
+import {ProductStore} from "../../src/models/product";
 
 describe("Test orders store", ()=>{
 
+    const orderStore = new OrderStore();
+    const userStore = new UsersStore();
+    const productStore = new ProductStore();
+
     afterAll(async()=>{
-        return await userStore.deleteAll();
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
     });
 
     beforeAll(async()=>{
-        return await userStore.deleteAll();
+        await userStore.deleteAll();
+        return await productStore.deleteAll();
     });
 
     let userIdCreated:number;

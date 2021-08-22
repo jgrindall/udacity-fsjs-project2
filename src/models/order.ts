@@ -63,7 +63,20 @@ export class OrderStore{
         }
     }
 
-    async addProductToOrder(quantity:number, order_id:number, product_id:number): Promise<{id:number}>{
+    async deleteOrder(order_id: number):Promise<Order>{
+        try {
+            const connection = await client.connect();
+            const sql = 'delete from orders where id = $1';
+            const result = await connection.query(sql, [order_id]);
+            connection.release();
+            return result.rows[0];
+        }
+        catch (err) {
+            throw new Error(`Could not delete order. Error: ${err}`)
+        }
+    }
+
+    async addProductToOrder(order_id:number, product_id:number, quantity:number): Promise<{id:number}>{
         try {
             const sql = 'insert into order_products (quantity, order_id, product_id) values($1, $2, $3) returning id';
             const connection = await client.connect();
