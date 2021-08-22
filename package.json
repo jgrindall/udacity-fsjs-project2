@@ -8,8 +8,8 @@
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
     "tsc": "tsc",
     "test": "npm run _test_create && npm run _test_migrate && npm run _test_jasmine && npm run _test_drop",
-    "_test_create": "db-migrate db:create fantasy_worlds_test --env test_create --verbose",
-    "_test_drop": "db-migrate db:drop fantasy_worlds_test --env test_create --verbose",
+    "_test_create": "db-migrate db:create udacity_fsjs_project2_test --env test --verbose",
+    "_test_drop": "db-migrate db:drop udacity_fsjs_project2_test --env test --verbose",
     "_test_migrate": "db-migrate up --env test --verbose",
     "_test_jasmine": "cross-env ENV=test jasmine-ts --config=jasmine.json"
   },
