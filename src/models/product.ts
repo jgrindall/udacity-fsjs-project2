@@ -15,7 +15,7 @@ export class ProductStore{
     async deleteAll(): Promise<Product[]> {
         try {
             const connection = await client.connect();
-            const sql = 'delete from products';
+            const sql = 'delete from products returning *';
             const result = await connection.query(sql);
             connection.release();
             return result.rows;
@@ -51,11 +51,24 @@ export class ProductStore{
         }
     }
 
-    async create(name:string, price:number, category:string): Promise<Product> {
+    async findByCategory(category:string):Promise<Product[]>{
+        try{
+            const connection = await client.connect();
+            const sql = 'select * from products where category=$1';
+            const result = await connection.query(sql, [category]);
+            await connection.release();
+            return result.rows;
+        }
+        catch(e){
+            throw new Error("get products by category error " + e.message);
+        }
+    }
+
+    async create(product: Omit<Product, "id">): Promise<Product> {
         try {
             const sql = 'insert into products (name, price, category) values($1, $2, $3) returning *';
             const connection = await client.connect();
-            const result = await connection.query(sql, [name, price, category]);
+            const result = await connection.query(sql, [product.name, product.price, product.category]);
             await connection.release();
             return result.rows[0];
         }
