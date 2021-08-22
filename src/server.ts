@@ -1,7 +1,7 @@
 import express, { Request, Response, Application } from 'express'
 import bodyParser from 'body-parser'
 import usersRoutes from "./handlers/api/users";
-//import orderRoutes from "./handlers/api/orders";
+import orderRoutes from "./handlers/api/orders";
 import productRoutes from "./handlers/api/products";
 //import dashboardRoutes from "./handlers/api/dashboard";
 
@@ -12,7 +12,7 @@ const port: number = 3000;
 app.use(bodyParser.json());
 
 app.use("/api/users/", usersRoutes);
-//app.use("/api/orders/", orderRoutes);
+app.use("/api/orders/", orderRoutes);
 app.use("/api/products/", productRoutes);
 //app.use("/api/dashboard/", dashboardRoutes);
 
