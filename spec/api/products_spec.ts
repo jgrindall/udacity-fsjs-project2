@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import app from "../../src/server";
 import {Product} from "../../src/models/product";
+import express from "express";
 
 const request = supertest(app);
 
@@ -42,6 +43,19 @@ describe("Test endpoint success", async () => {
         const response = await request.get("/api/products/" + idCreated);
         expect(response.status).toBe(200);
         expect(response.body.name).toEqual("name1");
+    });
+
+    it("test get by category", async()=>{
+        const response = await request.get("/api/products/category/home");
+        expect(response.status).toBe(200);
+        const products = (response.body as Product[]);
+        expect(products.length).toEqual(1);
+        expect(products[0].category).toEqual("home");
+
+        const response2 = await request.get("/api/products/category/office");
+        expect(response2.status).toBe(200);
+        const products2 = (response2.body as Product[]);
+        expect(products2).toEqual([]);
     });
 
 
