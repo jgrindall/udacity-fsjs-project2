@@ -1,5 +1,6 @@
 import express from "express";
 import {ProductStore, Product} from "../../models/product";
+import verifyAuth from "../middleware/auth";
 
 const store = new ProductStore();
 
@@ -19,9 +20,12 @@ export default express
         const products:Product[] = await store.findByCategory(category);
         res.json(products);
     })
-    .post("/", async (req: express.Request, res: express.Response) => {
+    .post("/", [verifyAuth], async (req: express.Request, res: express.Response) => {
+        console.log(res.locals.auth);
         const body:Omit<Product, "id"> = req.body as Omit<Product, "id">;
         const product:Product = await store.create(body);
         res.json(product);
     })
+
+
 

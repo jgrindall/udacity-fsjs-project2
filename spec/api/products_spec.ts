@@ -28,13 +28,22 @@ describe("Test endpoint success", async () => {
     let idCreated: number;
 
     it("test create", async () => {
+
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImpncmluZGFsbCIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRQVXhzTXJXRi43WGxWUzcvVlZveHoudTVUbGpNVUhXb05jQmNsUmhWa2QvQXR2UkdNQXEvbSJ9LCJpYXQiOjE2MjkwNDI5OTl9.GRcodSDEG9hIXLjt3ssa6AE4oEZ56Uyyqz6PQi8nJUw";
+
+        TODO
+        
         const response = await request
             .post("/api/products")
+            .set('Authorization', 'Bearer ' + token)
             .send({
                 category:"home",
                 name:"name1",
                 price:10
             });
+
+
+
         expect(response.status).toBe(200);
         const product2:Product = (response.body as Product);
         expect(product2).toBeTruthy();

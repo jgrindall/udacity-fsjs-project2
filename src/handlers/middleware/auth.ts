@@ -9,7 +9,8 @@ const verifyAuth = (req: express.Request, res: express.Response, next:express.Ne
         const token:string = authorizationHeader ? authorizationHeader.split(' ')[1] : "";
         const verify = jwt.verify(token, JWT_TOKEN_SECRET);
         if(verify){
-            next()
+            res.locals.auth = verify;
+            next();
         }
         else{
             res
