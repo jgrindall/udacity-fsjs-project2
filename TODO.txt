@@ -1,0 +1,28 @@
+Users need to be able to browse an index of all products
+See the specifics of a single product
+Add products to an order that they can view in a cart page.
+
+----
+
+Products GET index - view all (NO TOKEN)
+Products - GET show (id) (NO TOKEN)
+Products - POST create (...) (TOKEN)
+Products - GET showByCategory(category_id)
+
+Product: id, name, prive, category
+
+----
+
+Users GET index - view all (TOKEN)
+Users - GET show (id) (TOKEN)
+Users - POST Create (TOKEN)
+
+Users: id, firstName, lastName, password
+
+----
+
+Orders - create new by user (userid) TOKEN
+Orders - GET  current by user (userid) TOKEN
+Orders - add product to order (TOKEN)
+
+Order: id, user_id,  id of products, quantity or each, status (active, complete)
