@@ -3,6 +3,7 @@ import app from "../../src/server";
 import {Order} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
+import {token} from "./helpers";
 
 const request = supertest(app);
 const userStore = new UsersStore();
@@ -38,6 +39,7 @@ describe("Test endpoint success", async () => {
         };
         const response = await request
             .post("/api/users")
+            .set('Authorization', 'Bearer ' + token)
             .send(user);
 
         const user2:Users = (response.body as Users);

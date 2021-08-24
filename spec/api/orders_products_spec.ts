@@ -3,7 +3,7 @@ import app from "../../src/server";
 import {Order} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {Product, ProductStore} from "../../src/models/product";
-
+import {token} from "./helpers";
 const request = supertest(app);
 
 let userIdCreated:number;
@@ -29,6 +29,7 @@ describe("api", async () => {
         // first create a user and an order, and some products
         const response = await request
             .post("/api/users")
+            .set('Authorization', 'Bearer ' + token)
             .send({
                 firstName:"paul",
                 lastName:"smith",
@@ -44,6 +45,7 @@ describe("api", async () => {
 
         const response0 = await request
             .post("/api/products")
+            .set('Authorization', 'Bearer ' + token)
             .send({
                 category:"home",
                 name:"name1",

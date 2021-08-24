@@ -2,6 +2,7 @@ import supertest from "supertest";
 import app from "../../src/server";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
+import {token} from "./helpers";
 
 const request = supertest(app);
 
@@ -24,9 +25,18 @@ describe("Test endpoint success", async () => {
     let idCreated: number;
 
     it("test list", async () => {
-        const response = await request.get("/api/users");
+        const response = await request
+            .get("/api/users")
+            .set('Authorization', 'Bearer ' + token)
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
+    });
+
+    it("test list auth fail", async()=>{
+        const response = await request
+            .get("/api/users");
+        expect(response.status).toBe(401);
+        expect(response.body).toBeNull();
     });
 
     it("test create", async () => {
@@ -38,13 +48,16 @@ describe("Test endpoint success", async () => {
 
         const response = await request
             .post("/api/users")
+            .set('Authorization', 'Bearer ' + token)
             .send(user);
 
         expect(response.status).toBe(200);
         expect(response.body).toBeTruthy();
         const user2:Users = response.body as Users;
         expect(user2.firstName).toEqual(user.firstName);
-        const response2 = await request.get("/api/users");
+        const response2 = await request
+            .get("/api/users")
+            .set('Authorization', 'Bearer ' + token);
         expect(response2.status).toBe(200);
         const users = response2.body as Users[];
         expect(users.length).toEqual(1);
@@ -96,15 +109,43 @@ describe("Test endpoint success", async () => {
         expect(response.body).toEqual(null);
     });
 
+    it("test show", async () => {
+        const response = await request
+            .get("/api/users/" + idCreated)
+            .set('Authorization', 'Bearer ' + token);
+        expect(response.status).toBe(200);
+        expect(response.body).toBeTruthy();
+        const user2:Users = response.body as Users;
+        expect(user2.firstName).toEqual("paul");
+    });
+
+    it("test show - auth fail", async () => {
+        const response = await request
+            .get("/api/users/" + idCreated);
+        expect(response.status).toBe(401);
+        expect(response.body).toBeNull();
+    });
+
     it("test delete", async () => {
-        const response = await request.delete("/api/users/" + idCreated);
+        const response = await request
+            .delete("/api/users/" + idCreated)
+            .set('Authorization', 'Bearer ' + token);
         expect(response.status).toBe(200);
         const delUser = response.body as Users;
         expect(delUser.firstName).toEqual("paul");
 
-        const response2 = await request.get("/api/users");
+        const response2 = await request
+            .get("/api/users")
+            .set('Authorization', 'Bearer ' + token);
         expect(response2.status).toBe(200);
         expect(response2.body).toEqual([]);
+    });
+
+    it("test delete - auth fail", async () => {
+        const response = await request
+            .delete("/api/users/" + idCreated);
+        expect(response.status).toBe(401);
+        expect(response.body).toBeNull();
     });
 
 });

@@ -1,6 +1,7 @@
 import express from "express";
 import {UsersStore, Users} from "../../models/users";
 import jwt from "jsonwebtoken";
+import verifyAuth from "../middleware/auth";
 
 const JWT_TOKEN_SECRET:string = process.env.JWT_TOKEN_SECRET as string;
 
@@ -8,21 +9,21 @@ const store = new UsersStore();
 
 export default express
     .Router()
-    .get("/", async (req: express.Request, res: express.Response) => {
+    .get("/", [verifyAuth], async (req: express.Request, res: express.Response) => {
         const users = await store.index();
         res.json(users);
     })
-    .get("/:id", async (req: express.Request, res: express.Response) => {
+    .get("/:id", [verifyAuth], async (req: express.Request, res: express.Response) => {
         const id = parseInt(req.params.id);
         const user = await store.find(id);
         res.json(user);
     })
-    .delete("/:id", async (req: express.Request, res: express.Response) => {
+    .delete("/:id", [verifyAuth], async (req: express.Request, res: express.Response) => {
         const id = parseInt(req.params.id);
         const user = await store.delete(id);
         res.json(user);
     })
-    .post("/", async (req: express.Request, res: express.Response) => {
+    .post("/", [verifyAuth], async (req: express.Request, res: express.Response) => {
         const body:Omit<Users, "id"> = req.body as Omit<Users, "id">;
         const user = await store.create(body);
         res.json(user);
