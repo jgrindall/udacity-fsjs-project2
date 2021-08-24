@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../../src/server";
-import {Order} from "../../src/models/order";
+import {Order, OrderStatus} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
 import {token} from "./helpers";
@@ -12,7 +12,7 @@ const productStore = new ProductStore();
 let userIdCreated: number;
 let orderIdCreated: number;
 
-describe("Test endpoint success", async () => {
+xdescribe("Test endpoint success", async () => {
 
     afterAll(async()=>{
         await userStore.deleteAll();
@@ -50,7 +50,7 @@ describe("Test endpoint success", async () => {
         userIdCreated = user2.id;
 
         const order:Omit<Order, "id"> = {
-            status:"active",
+            status:OrderStatus.ACTIVE,
             user_id:userIdCreated
         };
         const response2 = await request
@@ -68,7 +68,7 @@ describe("Test endpoint success", async () => {
         const orders = (response3.body as Order[]);
         expect(orders).toBeTruthy();
         expect(orders.length).toEqual(1);
-        expect(orders[0].status).toEqual("active");
+        expect(orders[0].status).toEqual(OrderStatus.ACTIVE);
         expect(orders[0].user_id).toEqual(userIdCreated);
 
     });

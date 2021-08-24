@@ -1,9 +1,14 @@
 import client from "../database";
 import {Product} from "./product";
 
+export enum OrderStatus {
+    ACTIVE = "active",
+    COMPLETE = "complete"
+}
+
 export type Order = {
     id: number;
-    status: "active" | "complete";
+    status: OrderStatus;
     user_id: number;
 }
 
@@ -37,7 +42,7 @@ export class OrderStore{
         }
     }
 
-    async getForUser(user_id:number):Promise<Order[]>{
+    async getAllOrdersForUser(user_id:number):Promise<Order[]>{
         try{
             const connection = await client.connect();
             const sql = 'select * from orders where user_id=$1';
@@ -50,16 +55,39 @@ export class OrderStore{
         }
     }
 
-    async create(order: Omit<Order, "id">): Promise<Order> {
-        try {
-            const sql = 'insert into orders (status, user_id) values($1, $2) returning *';
+    async getCurrentOrderForUser(user_id:number):Promise<Order>{
+        let result;
+        try{
             const connection = await client.connect();
-            const result = await connection.query(sql, [order.status, order.user_id]);
+            const sql = 'select * from orders where user_id=$1 and status=$2';
+            result = await connection.query(sql, [user_id, OrderStatus.ACTIVE]);
             await connection.release();
-            return result.rows[0];
         }
-        catch (err) {
-            throw new Error(`Could not add new orders. Error: ${err}`)
+        catch(e){
+            throw new Error("get orders for user error " + e.message);
+        }
+        if(result.rows.length >= 2){
+            throw new Error(`Multiple orders found for user ${user_id}`);
+        }
+        return result.rows[0];
+    }
+
+    async create(order: Omit<Order, "id">): Promise<Order> {
+        const currentOrder = await this.getCurrentOrderForUser(order.user_id);
+        if(order.status === OrderStatus.ACTIVE && currentOrder){
+            throw new Error("current order already exists");
+        }
+        else{
+            try {
+                const sql = 'insert into orders (status, user_id) values($1, $2) returning *';
+                const connection = await client.connect();
+                const result = await connection.query(sql, [order.status, order.user_id]);
+                await connection.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Could not add new orders. Error: ${err}`)
+            }
         }
     }
 

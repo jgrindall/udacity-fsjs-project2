@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../../src/server";
-import {Order} from "../../src/models/order";
+import {Order, OrderStatus} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {Product, ProductStore} from "../../src/models/product";
 import {token} from "./helpers";
@@ -13,7 +13,7 @@ let productIdsCreated:number[];
 const userStore = new UsersStore();
 const productStore = new ProductStore();
 
-describe("api", async () => {
+xdescribe("api", async () => {
 
     afterAll(async()=>{
         await userStore.deleteAll();
@@ -60,7 +60,7 @@ describe("api", async () => {
         const response3 = await request
             .post("/api/orders")
             .send({
-                status:"active",
+                status: OrderStatus.ACTIVE,
                 user_id:userIdCreated
             });
 

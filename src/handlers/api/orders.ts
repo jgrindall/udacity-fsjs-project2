@@ -16,7 +16,7 @@ export default express
     })
     .get("/user/:user_id", async (req: express.Request, res: express.Response) => {
         const user_id = parseInt(req.params.user_id);
-        const order = await store.getForUser(user_id);
+        const order = await store.getAllOrdersForUser(user_id);
         res.json(order);
     })
     .post("/", async (req: express.Request, res: express.Response) => {
