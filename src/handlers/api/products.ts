@@ -36,8 +36,15 @@ export default express
     //create a new product. Requires a token
     .post("/", [verifyAuth], async (req: express.Request, res: express.Response) => {
         const body: Omit<Product, "id"> = req.body as Omit<Product, "id">;
-        const product: Product = await store.create(body);
-        res
-            .status(200)
-            .json(product);
+        try {
+            const product: Product = await store.create(body);
+            res
+                .status(200)
+                .json(product);
+        }
+        catch (e) {
+            res
+                .status(403)
+                .json(null);
+        }
     });

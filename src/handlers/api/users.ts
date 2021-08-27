@@ -2,6 +2,7 @@ import express from "express";
 import {UsersStore, Users} from "../../models/users";
 import jwt from "jsonwebtoken";
 import verifyAuth from "../middleware/auth";
+import {Product} from "../../models/product";
 
 const JWT_TOKEN_SECRET: string = process.env.JWT_TOKEN_SECRET as string;
 
@@ -38,11 +39,18 @@ export default express
 
     // create a new user. Requires token
     .post("/", [verifyAuth], async (req: express.Request, res: express.Response) => {
-        const body: Omit<Users, "id"> = req.body as Omit<Users, "id">;
-        const user = await store.create(body);
-        res
-            .status(200)
-            .json(user);
+        try {
+            const body: Omit<Users, "id"> = req.body as Omit<Users, "id">;
+            const user = await store.create(body);
+            res
+                .status(200)
+                .json(user);
+        }
+        catch (e) {
+            res
+                .status(403)
+                .json(null);
+        }
     })
 
     // login. Returns the token to be used later.

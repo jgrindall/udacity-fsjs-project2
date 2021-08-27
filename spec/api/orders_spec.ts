@@ -31,6 +31,18 @@ describe("Test endpoint success", async () => {
         expect(response.body).toEqual([]);
     });
 
+    it("test create - invalid format", async () => {
+        const user: any = {
+            something: 123
+        };
+        const response = await request
+            .post("/api/users")
+            .set('Authorization', 'Bearer ' + token)
+            .send(user);
+        expect(response.status).toBe(403);
+        expect(response.body).toBeNull();
+    });
+
     it("test create", async () => {
         // first create a user
         const user:Omit<Users, "id"> = testingUser;

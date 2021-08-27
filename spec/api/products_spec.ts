@@ -58,6 +58,17 @@ describe("Test endpoint success", async () => {
         expect(products[0].name).toEqual("name1");
     });
 
+    it("test create - invalid format", async () => {
+        const response = await request
+            .post("/api/products")
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                something:"name1"
+            });
+        expect(response.status).toBe(403);
+        expect(response.body).toBeNull();
+    });
+
     it("test create auth fail", async () =>{
         const response = await request
             .post("/api/products")
