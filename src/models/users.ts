@@ -1,3 +1,8 @@
+/**
+ * Represents a user
+ */
+
+
 import client from "../database";
 import bcrypt from "bcrypt";
 

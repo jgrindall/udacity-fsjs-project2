@@ -1,3 +1,8 @@
+/**
+ * middleware to protect certain routes
+ */
+
+
 import express from "express";
 import jwt from "jsonwebtoken";
 

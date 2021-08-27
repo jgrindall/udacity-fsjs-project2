@@ -1,6 +1,8 @@
 import client from "../database";
 import {Product} from "./product";
 
+/** orders can be in two states - active or complete **/
+
 export enum OrderStatus {
     ACTIVE = "active",
     COMPLETE = "complete"
@@ -55,6 +57,7 @@ export class OrderStore{
         }
     }
 
+    /** a user is allowed one active order **/
     async getCurrentOrderForUser(user_id:number):Promise<Order>{
         let result;
         try{
@@ -72,6 +75,8 @@ export class OrderStore{
         return result.rows[0];
     }
 
+
+    /** create a new order. A user is allowed one active order **/
     async create(order: Omit<Order, "id">): Promise<Order> {
         const currentOrder = await this.getCurrentOrderForUser(order.user_id);
         if(order.status === OrderStatus.ACTIVE && currentOrder){
