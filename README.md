@@ -1,3 +1,18 @@
+#NOTE
+
+For instructions for
+- setting up and running the project
+- including how you setup, run, and connect to your database.
+
+Please see <a href="./INFO.md">INFO.md</a>
+
+----
+
+
+
+
+
+
 # Storefront Backend Project 
 
 ## Getting Started 
