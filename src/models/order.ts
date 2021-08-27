@@ -14,6 +14,15 @@ export type Order = {
     user_id: number;
 };
 
+const validate = (order:Omit<Order, "id">)=>{
+    if(order.status && order.user_id){
+        // ok
+    }
+    else{
+        throw new Error("invalid order");
+    }
+};
+
 export class OrderStore {
     constructor() {}
     async index(): Promise<Order[]> {
@@ -83,6 +92,7 @@ export class OrderStore {
 
     /** create a new order. A user is allowed one active order **/
     async create(order: Omit<Order, "id">): Promise<Order> {
+        validate(order);
         const currentOrder = await this.getCurrentOrderForUser(order.user_id);
         if(order.status === OrderStatus.ACTIVE && currentOrder) {
             throw new Error("current order already exists");

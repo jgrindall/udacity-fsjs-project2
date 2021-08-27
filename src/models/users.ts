@@ -4,12 +4,22 @@
 
 import client from "../database";
 import bcrypt from "bcrypt";
+import {Order} from "./order";
 
 export type Users = {
     id: number;
     firstName: string;
     lastName: string;
     password: string;
+};
+
+const validate = (user:Omit<Users, "id">)=>{
+    if(user.firstName && user.firstName && user.password){
+        // ok
+    }
+    else{
+        throw new Error("invalid user");
+    }
 };
 
 const BCRYPT_PASSWORD: string = process.env.BCRYPT_PASSWORD as string;
@@ -67,6 +77,7 @@ export class UsersStore {
 
     async create(user: Omit<Users, "id">): Promise<Users> {
         try {
+            validate(user);
             const hash = bcrypt.hashSync(user.password + BCRYPT_PASSWORD, parseInt(SALT_ROUNDS));
             const sql = 'insert into users ("firstName", "lastName", password) values($1, $2, $3) returning *';
             const connection = await client.connect();

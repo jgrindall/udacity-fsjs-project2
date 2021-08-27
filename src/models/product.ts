@@ -7,6 +7,15 @@ export type Product = {
     category: string;
 };
 
+const validate = (product:Omit<Product, "id">)=>{
+    if(product.name && product.price && product.category){
+        // ok
+    }
+    else{
+        throw new Error("invalid product");
+    }
+};
+
 export class ProductStore {
     constructor() {}
 
@@ -60,6 +69,7 @@ export class ProductStore {
 
     async create(product: Omit<Product, "id">): Promise<Product> {
         try {
+            validate(product);
             const sql = "insert into products (name, price, category) values($1, $2, $3) returning *";
             const connection = await client.connect();
             const result = await connection.query(sql, [product.name, product.price, product.category]);
