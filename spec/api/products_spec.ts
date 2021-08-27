@@ -23,6 +23,7 @@ describe("Test endpoint success", async () => {
 
     it("test list", async () => {
         const response = await request.get("/api/products");
+
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
     });
@@ -41,14 +42,17 @@ describe("Test endpoint success", async () => {
 
         expect(response.status).toBe(200);
         const product2:Product = (response.body as Product);
+
         expect(product2).toBeTruthy();
         expect(product2.name).toEqual("name1");
 
         idCreated = product2.id;
 
         const response2 = await request.get("/api/products");
+
         expect(response2.status).toBe(200);
         const products = (response2.body as Product[]);
+
         expect(products).toBeTruthy();
         expect(products.length).toEqual(1);
         expect(products[0].name).toEqual("name1");
@@ -62,26 +66,32 @@ describe("Test endpoint success", async () => {
                 name:"name1",
                 price:10
             });
+
         expect(response.status).toBe(401);
         expect(response.body).toBeNull();
     });
 
     it("test get by id", async () => {
         const response = await request.get("/api/products/" + idCreated);
+
         expect(response.status).toBe(200);
         expect(response.body.name).toEqual("name1");
     });
 
     it("test get by category", async()=>{
         const response = await request.get("/api/products/category/home");
+
         expect(response.status).toBe(200);
         const products = (response.body as Product[]);
+
         expect(products.length).toEqual(1);
         expect(products[0].category).toEqual("home");
 
         const response2 = await request.get("/api/products/category/office");
+
         expect(response2.status).toBe(200);
         const products2 = (response2.body as Product[]);
+
         expect(products2).toEqual([]);
     });
 

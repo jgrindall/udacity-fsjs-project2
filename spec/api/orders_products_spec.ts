@@ -37,6 +37,7 @@ describe("api", async () => {
 
         const response2 = await request.get("/api/orders/user/" + userIdCreated);
         const orders:Order[] = (response2.body as Order[]);
+
         expect(orders.length).toEqual(0);
 
         const response0 = await request
@@ -65,12 +66,14 @@ describe("api", async () => {
 
         const response4 = await request.get("/api/orders/user/" + userIdCreated);
         const orders2:Order[] = (response4.body as Order[]);
+
         expect(orders2.length).toEqual(1);
 
         const response5 = await request
             .get("/api/orders/" + orderIdCreated + "/products");
 
         const products:Product[] = (response5.body as Product[]);
+
         expect(products.length).toEqual(0);
 
         await request
@@ -84,6 +87,7 @@ describe("api", async () => {
             .get("/api/orders/" + orderIdCreated + "/products");
 
         const products2:Product[] = (response7.body as Product[]);
+
         expect(products2.length).toEqual(1);
 
     });

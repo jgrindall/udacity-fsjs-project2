@@ -24,6 +24,7 @@ describe("Test orders store", ()=>{
 
     it("list orders", async()=>{
         const orders:Order[] = await orderStore.index();
+
         expect(orders).toBeTruthy();
         expect(orders).toEqual([]);
     });
@@ -36,49 +37,55 @@ describe("Test orders store", ()=>{
             user_id:userIdCreated
         };
         const order2 = await orderStore.create(order);
+
         expect(order2).toBeTruthy();
         expect(order2.user_id).toEqual(userIdCreated);
         orderIdCreated = order2.id;
 
         const orders:Order[] = await orderStore.index();
+
         expect(orders.length).toEqual(1);
 
     });
 
     it("cannot have two active orders", async()=>{
-        try{
-            const order = await orderStore.create({
+        try {
+            await orderStore.create({
                 status: OrderStatus.ACTIVE,
                 user_id: userIdCreated
             });
             fail();
         }
-        catch(e){
+        catch (e){
             expect(e.message).toEqual("current order already exists");
         }
     });
 
     it("test get by id", async () => {
         const order:Order = await orderStore.find(orderIdCreated);
+
         expect(order.id).toEqual(orderIdCreated);
         expect(order.user_id).toEqual(userIdCreated);
     });
 
     it("test get by user_id", async () => {
         const orders:Order[] = await orderStore.getAllOrdersForUser(userIdCreated);
+
         expect(orders.length).toEqual(1);
         expect(orders[0].id).toEqual(orderIdCreated);
         expect(orders[0].user_id).toEqual(userIdCreated);
     });
 
     it("test cascade when user deleted", async () => {
-        const user = await userStore.delete(userIdCreated);
+        await userStore.delete(userIdCreated);
 
         const orders:Order[] = await orderStore.index();
+
         expect(orders).toBeTruthy();
         expect(orders).toEqual([]);
 
         const orders2:Order[] = await orderStore.getAllOrdersForUser(userIdCreated);
+
         expect(orders2.length).toEqual(0);
     });
 

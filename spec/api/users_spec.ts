@@ -28,6 +28,7 @@ describe("Test endpoint success", async () => {
         const response = await request
             .get("/api/users")
             .set('Authorization', 'Bearer ' + token)
+
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
     });
@@ -35,6 +36,7 @@ describe("Test endpoint success", async () => {
     it("test list auth fail", async()=>{
         const response = await request
             .get("/api/users");
+
         expect(response.status).toBe(401);
         expect(response.body).toBeNull();
     });
@@ -50,12 +52,15 @@ describe("Test endpoint success", async () => {
         expect(response.status).toBe(200);
         expect(response.body).toBeTruthy();
         const user2:Users = response.body as Users;
+
         expect(user2.firstName).toEqual(user.firstName);
         const response2 = await request
             .get("/api/users")
             .set('Authorization', 'Bearer ' + token);
+
         expect(response2.status).toBe(200);
         const users = response2.body as Users[];
+
         expect(users.length).toEqual(1);
         expect(users[0].firstName).toEqual(user.firstName);
 
@@ -70,6 +75,7 @@ describe("Test endpoint success", async () => {
         const response = await request
             .post("/api/users/auth")
             .send(user);
+
         expect(response.status).toBe(200);
         expect(response.body).toBeTruthy();
         const user2:Users = response.body as Users;
@@ -89,6 +95,7 @@ describe("Test endpoint success", async () => {
         const response = await request
             .post("/api/users/auth")
             .send(user);
+
         expect(response.status).toBe(401);
         expect(response.body).toEqual(null);
     });
@@ -101,6 +108,7 @@ describe("Test endpoint success", async () => {
         const response = await request
             .post("/api/users/auth")
             .send(user);
+
         expect(response.status).toBe(401);
         expect(response.body).toEqual(null);
     });
@@ -109,15 +117,18 @@ describe("Test endpoint success", async () => {
         const response = await request
             .get("/api/users/" + idCreated)
             .set('Authorization', 'Bearer ' + token);
+
         expect(response.status).toBe(200);
         expect(response.body).toBeTruthy();
         const user2:Users = response.body as Users;
+
         expect(user2.firstName).toEqual("paul");
     });
 
     it("test show - auth fail", async () => {
         const response = await request
             .get("/api/users/" + idCreated);
+
         expect(response.status).toBe(401);
         expect(response.body).toBeNull();
     });
@@ -126,13 +137,16 @@ describe("Test endpoint success", async () => {
         const response = await request
             .delete("/api/users/" + idCreated)
             .set('Authorization', 'Bearer ' + token);
+
         expect(response.status).toBe(200);
         const delUser = response.body as Users;
+
         expect(delUser.firstName).toEqual("paul");
 
         const response2 = await request
             .get("/api/users")
             .set('Authorization', 'Bearer ' + token);
+
         expect(response2.status).toBe(200);
         expect(response2.body).toEqual([]);
     });
@@ -140,6 +154,7 @@ describe("Test endpoint success", async () => {
     it("test delete - auth fail", async () => {
         const response = await request
             .delete("/api/users/" + idCreated);
+
         expect(response.status).toBe(401);
         expect(response.body).toBeNull();
     });

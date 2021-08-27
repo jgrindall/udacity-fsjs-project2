@@ -1,19 +1,25 @@
 {
     "root": true,
+    "globals": {
+        "process": true,
+        "console": true
+    },
+    "env": {
+        "jasmine": true,
+        "node": true
+    },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "jasmine"
     ],
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "plugin:prettier/recommended"
+        "plugin:jasmine/recommended"
     ],
     "rules": {
         "object-curly-spacing": "off",
