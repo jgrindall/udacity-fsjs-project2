@@ -9,7 +9,9 @@ export default express
     //list all orders
     .get("/", async (req: express.Request, res: express.Response) => {
         const orders = await store.index();
-        res.json(orders);
+        res
+            .status(200)
+            .json(orders);
     })
 
     //get order by id
@@ -29,8 +31,13 @@ export default express
     // create a new order
     .post("/", async (req: express.Request, res: express.Response) => {
         const body: Omit<Order, "id"> = req.body as Omit<Order, "id">;
-        const user = await store.create(body);
-        res.json(user);
+        try {
+            const user = await store.create(body);
+            res.json(user);
+        }
+        catch (e) {
+            res.status(403).json(null);
+        }
     })
 
     // get products in an order

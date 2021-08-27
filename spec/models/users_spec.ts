@@ -51,13 +51,13 @@ describe("Test users store", ()=>{
     it("auth works - fail, wrong password", async ()=>{
         const user = await userStore.authenticate("paul smith", "not the password");
 
-        expect(user).toEqual(null);
+        expect(user).toBeNull();
     });
 
     it("auth works - fail missing user", async ()=>{
         const user = await userStore.authenticate("someone else", "s0meth1ng");
 
-        expect(user).toEqual(null);
+        expect(user).toBeNull();
     });
 
     it("del one user works", async ()=>{

@@ -37,16 +37,15 @@ export default express
         res.json(user);
     })
 
-    // login
+    // login. Returns the token to be used later.
     .post("/auth", async (req: express.Request, res: express.Response) => {
         const body = req.body as {username: string; password: string};
         const user = await store.authenticate(body.username, body.password);
         if(user) {
             const token = jwt.sign({user: user}, JWT_TOKEN_SECRET);
-            console.log(token);
             res.status(200)
                 .header("")
-                .json(user);
+                .json({access_token:token});
         } else{
             res.status(401).json(null);
         }

@@ -3,6 +3,7 @@ import app from "../../src/server";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
 import {token, testingUser} from "./helpers";
+import jwt, {JwtPayload} from "jsonwebtoken";
 
 const request = supertest(app);
 
@@ -78,13 +79,17 @@ describe("Test endpoint success", async () => {
 
         expect(response.status).toBe(200);
         expect(response.body).toBeTruthy();
-        const user2:Users = response.body as Users;
-        //const auth = response.headers["Authorization"];
-        //const decoded:JwtPayload = jwt.decode(token) as JwtPayload;
-        //expect(decoded).toBeTruthy();
-        //expect(decoded['user']).toBeTruthy();
-        expect(user2).toBeTruthy();
-        expect(user2.firstName).toEqual("paul");
+        const _token:string = response.body.access_token;
+        expect(_token).toBeTruthy();
+        
+        const decoded:JwtPayload = jwt.decode(_token) as JwtPayload;
+        expect(decoded).toBeTruthy();
+        expect(decoded.user).toBeTruthy();
+        const user2 = decoded.user as Users;
+
+        expect(user2.firstName).toBe(testingUser.firstName);
+        expect(user2.lastName).toBe(testingUser.lastName);
+
     });
 
     it("test auth fail, incorrect password", async () => {
@@ -97,7 +102,7 @@ describe("Test endpoint success", async () => {
             .send(user);
 
         expect(response.status).toBe(401);
-        expect(response.body).toEqual(null);
+        expect(response.body).toBeNull();
     });
 
     it("test auth fail, incorrect username", async () => {
@@ -110,7 +115,7 @@ describe("Test endpoint success", async () => {
             .send(user);
 
         expect(response.status).toBe(401);
-        expect(response.body).toEqual(null);
+        expect(response.body).toBeNull();
     });
 
     it("test show", async () => {

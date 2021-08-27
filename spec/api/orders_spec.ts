@@ -74,6 +74,18 @@ describe("Test endpoint success", async () => {
 
     });
 
+    it("test fail to create another open order", async () => {
+        const order:Omit<Order, "id"> = {
+            status:OrderStatus.ACTIVE,
+            user_id:userIdCreated
+        };
+        const response = await request
+            .post("/api/orders")
+            .send(order);
+        expect(response.status).toBe(403);
+        expect(response.body).toBeNull();
+    });
+
     it("test get by id", async () => {
         const response = await request.get("/api/orders/" + orderIdCreated);
 
