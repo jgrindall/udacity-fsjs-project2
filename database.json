@@ -3,20 +3,20 @@
     "driver": "pg",
     "host": "127.0.0.1",
     "database": "udacity_fsjs_project2",
-    "user": "postgres",
+    "user": "postgres_udacity",
     "password": "p0stgres"
   },
   "test_create": {
     "driver": "pg",
     "host": "127.0.0.1",
-    "user": "postgres",
+    "user": "postgres_udacity",
     "password": "p0stgres"
   },
   "test": {
     "driver": "pg",
     "host": "127.0.0.1",
     "database": "udacity_fsjs_project2_test",
-    "user": "postgres",
+    "user": "postgres_udacity",
     "password": "p0stgres"
   }
 }
