@@ -44,6 +44,19 @@ export class OrderStore{
         }
     }
 
+    async completeOrder(id:number):Promise<Order>{
+        try{
+            const connection = await client.connect();
+            const sql = 'update orders set status=$1 where id=$2 returning *';
+            const result = await connection.query(sql, [OrderStatus.COMPLETE, id]);
+            await connection.release();
+            return result.rows[0];
+        }
+        catch(e){
+            throw new Error("get order error " + e.message);
+        }
+    }
+
     async getAllOrdersForUser(user_id:number):Promise<Order[]>{
         try{
             const connection = await client.connect();

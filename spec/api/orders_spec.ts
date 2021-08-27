@@ -3,7 +3,7 @@ import app from "../../src/server";
 import {Order, OrderStatus} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
-import {token} from "./helpers";
+import {testingUser, token} from "./helpers";
 
 const request = supertest(app);
 const userStore = new UsersStore();
@@ -12,7 +12,7 @@ const productStore = new ProductStore();
 let userIdCreated: number;
 let orderIdCreated: number;
 
-xdescribe("Test endpoint success", async () => {
+describe("Test endpoint success", async () => {
 
     afterAll(async()=>{
         await userStore.deleteAll();
@@ -32,11 +32,7 @@ xdescribe("Test endpoint success", async () => {
 
     it("test create", async () => {
         // first create a user
-        const user:Omit<Users, "id"> = {
-            firstName:"paul",
-            lastName:"smith",
-            password:"s0meth1ng"
-        };
+        const user:Omit<Users, "id"> = testingUser;
         const response = await request
             .post("/api/users")
             .set('Authorization', 'Bearer ' + token)

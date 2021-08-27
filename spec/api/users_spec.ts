@@ -2,11 +2,11 @@ import supertest from "supertest";
 import app from "../../src/server";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
-import {token} from "./helpers";
+import {token, testingUser} from "./helpers";
 
 const request = supertest(app);
 
-xdescribe("Test endpoint success", async () => {
+describe("Test endpoint success", async () => {
 
     const userStore = new UsersStore();
     const productStore = new ProductStore();
@@ -40,11 +40,7 @@ xdescribe("Test endpoint success", async () => {
     });
 
     it("test create", async () => {
-        const user:Omit<Users, "id"> = {
-            firstName:"paul",
-            lastName:"smith",
-            password:"s0meth1ng"
-        };
+        const user:Omit<Users, "id"> = testingUser;
 
         const response = await request
             .post("/api/users")
@@ -68,8 +64,8 @@ xdescribe("Test endpoint success", async () => {
 
     it("test auth", async () => {
         const user = {
-            username:"paul smith",
-            password:"s0meth1ng"
+            username: testingUser.firstName + " " + testingUser.lastName,
+            password: testingUser.password
         };
         const response = await request
             .post("/api/users/auth")

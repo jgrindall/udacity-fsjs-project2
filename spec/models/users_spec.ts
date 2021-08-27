@@ -1,5 +1,6 @@
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
+import {testingUser} from "../api/helpers";
 
 const userStore = new UsersStore();
 const productStore = new ProductStore();
@@ -25,7 +26,7 @@ describe("Test users store", ()=>{
     });
 
     it("create works", async ()=>{
-        const user:Users = await userStore.create({firstName:"paul", lastName:"smith", password:"s0meth1ng"});
+        const user:Users = await userStore.create(testingUser);
         expect(user).toBeTruthy();
         expect(user.firstName).toEqual("paul");
         expect(user.password).not.toEqual("s0meth1ng");

@@ -1,8 +1,9 @@
-import {OrderStore, Order, OrderStatus} from "../../src/models/order";
+import {Order, OrderStatus, OrderStore} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {Product, ProductStore} from "../../src/models/product";
+import {testingUser} from "../api/helpers";
 
-xdescribe("Test products in orders", ()=>{
+describe("Test products in orders", ()=>{
 
     afterAll(async()=>{
         await userStore.deleteAll();
@@ -23,11 +24,7 @@ xdescribe("Test products in orders", ()=>{
     const productStore = new ProductStore();
 
     it("make a new user", async()=>{
-        const user:Users = await userStore.create({
-            firstName:"paul",
-            lastName:"smith",
-            password:"passw0rd"
-        });
+        const user:Users = await userStore.create(testingUser);
         userIdCreated = user.id;
         const orders:Order[] = await orderStore.getAllOrdersForUser(userIdCreated);
         expect(orders).toEqual([]);
@@ -62,6 +59,13 @@ xdescribe("Test products in orders", ()=>{
 
         const products0:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
         expect(products0.length).toEqual(1);
+    });
+
+    it("close order", async()=>{
+        const order = await orderStore.completeOrder(orderIdsCreated[0]);
+        expect(order).toBeTruthy();
+        expect(order.status).toEqual(OrderStatus.COMPLETE);
+        expect(order.id).toEqual(orderIdsCreated[0]);
     });
 
     it("make a new order and add products to it", async()=>{

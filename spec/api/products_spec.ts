@@ -6,7 +6,7 @@ import {token} from "./helpers";
 
 const request = supertest(app);
 
-xdescribe("Test endpoint success", async () => {
+describe("Test endpoint success", async () => {
 
     const userStore = new UsersStore();
     const productStore = new ProductStore();

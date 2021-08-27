@@ -3,7 +3,7 @@ import app from "../../src/server";
 import {Order, OrderStatus} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {Product, ProductStore} from "../../src/models/product";
-import {token} from "./helpers";
+import {testingUser, token} from "./helpers";
 const request = supertest(app);
 
 let userIdCreated:number;
@@ -13,7 +13,7 @@ let productIdsCreated:number[];
 const userStore = new UsersStore();
 const productStore = new ProductStore();
 
-xdescribe("api", async () => {
+describe("api", async () => {
 
     afterAll(async()=>{
         await userStore.deleteAll();
@@ -30,11 +30,7 @@ xdescribe("api", async () => {
         const response = await request
             .post("/api/users")
             .set('Authorization', 'Bearer ' + token)
-            .send({
-                firstName:"paul",
-                lastName:"smith",
-                password:"s0meth1ng"
-            });
+            .send(testingUser);
 
         const user:Users = (response.body as Users);
         userIdCreated = user.id;

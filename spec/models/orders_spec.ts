@@ -1,6 +1,7 @@
 import {OrderStore, Order, OrderStatus} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
+import {testingUser} from "../api/helpers";
 
 describe("Test orders store", ()=>{
 
@@ -21,18 +22,14 @@ describe("Test orders store", ()=>{
     let userIdCreated:number;
     let orderIdCreated: number;
 
-    xit("list orders", async()=>{
+    it("list orders", async()=>{
         const orders:Order[] = await orderStore.index();
         expect(orders).toBeTruthy();
         expect(orders).toEqual([]);
     });
 
     it("create an order", async ()=>{
-        const user:Users = await userStore.create({
-            firstName:"paul",
-            lastName:"smith",
-            password:"passw0rd"
-        });
+        const user:Users = await userStore.create(testingUser);
         userIdCreated = user.id;
         const order:Omit<Order, "id"> = {
             status:OrderStatus.ACTIVE,
@@ -48,20 +45,33 @@ describe("Test orders store", ()=>{
 
     });
 
-    xit("test get by id", async () => {
+    it("cannot have two active orders", async()=>{
+        try{
+            const order = await orderStore.create({
+                status: OrderStatus.ACTIVE,
+                user_id: userIdCreated
+            });
+            fail();
+        }
+        catch(e){
+            expect(e.message).toEqual("current order already exists");
+        }
+    });
+
+    it("test get by id", async () => {
         const order:Order = await orderStore.find(orderIdCreated);
         expect(order.id).toEqual(orderIdCreated);
         expect(order.user_id).toEqual(userIdCreated);
     });
 
-    xit("test get by user_id", async () => {
+    it("test get by user_id", async () => {
         const orders:Order[] = await orderStore.getAllOrdersForUser(userIdCreated);
         expect(orders.length).toEqual(1);
         expect(orders[0].id).toEqual(orderIdCreated);
         expect(orders[0].user_id).toEqual(userIdCreated);
     });
 
-    xit("test cascade when user deleted", async () => {
+    it("test cascade when user deleted", async () => {
         const user = await userStore.delete(userIdCreated);
 
         const orders:Order[] = await orderStore.index();
