@@ -2,10 +2,8 @@ import dotenv from 'dotenv'
 import {Pool} from 'pg'
 import path from 'path';
 
-const configPath = path.resolve(__dirname, '../.env');
-
 dotenv.config({
-    path:configPath
+    path:path.resolve(__dirname, '../.env')
 });
 
 const {
@@ -36,6 +34,4 @@ else{
     };
 }
 
-const client:Pool = new Pool(config);
-
-export default client;
+export default new Pool(config);
