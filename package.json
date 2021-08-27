@@ -7,7 +7,6 @@
     "start": "node src/server.ts",
     "prod": "node dist/server.js",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
-    "tsc": "tsc",
     "build": "npx tsc",
     "test": "npm run test:drop && npm run test:create && npm run test:migrate && npm run test:jasmine && npm run test:drop",
     "test:create": "db-migrate db:create udacity_fsjs_project2_test --env test_create --verbose",
