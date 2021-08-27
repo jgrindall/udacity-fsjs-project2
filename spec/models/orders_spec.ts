@@ -1,4 +1,4 @@
-import {OrderStore, Order, OrderStatus} from "../../src/models/order";
+import {Order, OrderStatus, OrderStore} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
 import {ProductStore} from "../../src/models/product";
 import {testingUser} from "../api/helpers";
@@ -74,6 +74,16 @@ describe("Test orders store", ()=>{
         expect(orders.length).toEqual(1);
         expect(orders[0].id).toEqual(orderIdCreated);
         expect(orders[0].user_id).toEqual(userIdCreated);
+    });
+
+    it("test get by user_id and status", async () => {
+        const orders:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.ACTIVE);
+        expect(orders.length).toEqual(1);
+        expect(orders[0].id).toEqual(orderIdCreated);
+        expect(orders[0].user_id).toEqual(userIdCreated);
+
+        const orders2:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.COMPLETE);
+        expect(orders2.length).toEqual(0);
     });
 
     it("test cascade when user deleted", async () => {

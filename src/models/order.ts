@@ -61,6 +61,18 @@ export class OrderStore {
         }
     }
 
+    async getAllOrdersForUserAndStatus(user_id: number, status:OrderStatus):Promise<Order[]> {
+        try {
+            const connection = await client.connect();
+            const sql = "select * from orders where user_id=$1 and status=$2";
+            const result = await connection.query(sql, [user_id, status]);
+            await connection.release();
+            return result.rows;
+        } catch (e) {
+            throw new Error("get order for user error " + e.message);
+        }
+    }
+
     async getAllOrdersForUser(user_id: number): Promise<Order[]> {
         try {
             const connection = await client.connect();

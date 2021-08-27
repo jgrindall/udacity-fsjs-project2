@@ -1,5 +1,5 @@
 import express from "express";
-import {OrderStore, Order} from "../../models/order";
+import {OrderStore, Order, OrderStatus} from "../../models/order";
 
 const store = new OrderStore();
 
@@ -27,6 +27,16 @@ export default express
     .get("/user/:user_id", async (req: express.Request, res: express.Response) => {
         const user_id = parseInt(req.params.user_id);
         const order = await store.getAllOrdersForUser(user_id);
+        res
+            .status(200)
+            .json(order);
+    })
+
+    //get orders by user and status
+    .get("/user/:user_id/:status", async (req: express.Request, res: express.Response) => {
+        const user_id = parseInt(req.params.user_id);
+        const status:OrderStatus = req.params.status as OrderStatus;
+        const order = await store.getAllOrdersForUserAndStatus(user_id, status);
         res
             .status(200)
             .json(order);

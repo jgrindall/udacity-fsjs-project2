@@ -120,6 +120,27 @@ describe("Test endpoint success", async () => {
         expect(orders[0].user_id).toEqual(userIdCreated);
     });
 
+    it("test get active by user_id", async () => {
+        const response = await request.get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.ACTIVE);
+
+        expect(response.status).toBe(200);
+        const orders:Order[] = (response.body) as Order[];
+
+        expect(orders.length).toEqual(1);
+        expect(orders[0].id).toEqual(orderIdCreated);
+        expect(orders[0].user_id).toEqual(userIdCreated);
+
+
+
+        const response2 = await request.get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.COMPLETE);
+
+        expect(response2.status).toBe(200);
+        const orders2:Order[] = (response2.body) as Order[];
+
+        expect(orders2.length).toEqual(0);
+
+    });
+
     it("test cascade when user deleted", async () => {
         await userStore.delete(userIdCreated);
         const response = await request.get("/api/orders");

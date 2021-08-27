@@ -55,6 +55,14 @@ describe("Test products in orders", ()=>{
         expect(orders[0].user_id).toEqual(userIdCreated);
         expect(orders[0].status).toEqual(OrderStatus.ACTIVE);
 
+        const orders2:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.ACTIVE);
+        expect(orders2.length).toEqual(1);
+        expect(orders2[0].user_id).toEqual(userIdCreated);
+        expect(orders2[0].status).toEqual(OrderStatus.ACTIVE);
+
+        const order3:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.COMPLETE);
+        expect(order3.length).toEqual(0);
+
         const products:Product[] = await orderStore.getProductsForOrder(order.id);
 
         expect(products.length).toEqual(0);
@@ -71,6 +79,12 @@ describe("Test products in orders", ()=>{
         expect(order).toBeTruthy();
         expect(order.status).toEqual(OrderStatus.COMPLETE);
         expect(order.id).toEqual(orderIdsCreated[0]);
+
+        const orders2:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.ACTIVE);
+        expect(orders2.length).toEqual(0);
+        const order3:Order[] = await orderStore.getAllOrdersForUserAndStatus(userIdCreated, OrderStatus.COMPLETE);
+        expect(order3.length).toEqual(1);
+
     });
 
     it("make a new order and add products to it", async()=>{
