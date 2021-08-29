@@ -26,6 +26,7 @@ I have made the following decisions:
 
  - To buld and run the app
     
+    - npm i
     - npm run build
     - npm run prod
 
@@ -36,10 +37,24 @@ I have made the following decisions:
 - Both databases should belong to a user:
 
     - username: 'postgres_udacity'
-    - password: 'p0stgres'
+    - password: 'p0stgres' (zero in place of o)
 
 Before running the app or tests please ensure this user exists.
 
+I created my user in pgadmin (see <a href="./users.png">users.png</a>)
+
+Alternatively, use the SQL
+
+```
+CREATE ROLE postgres_udacity WITH
+	LOGIN
+	NOSUPERUSER
+	CREATEDB
+	NOCREATEROLE
+	INHERIT
+	NOREPLICATION
+	CONNECTION LIMIT -1
+	PASSWORD 'xxxxxx';
 
 
 
