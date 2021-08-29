@@ -13,28 +13,32 @@ I have made the following decisions:
 3. username
     - Users have a firstName and lastName but in my app they login using firstName + " " + lastName as their "username"
 
+4. authentication
+    - Any valid token will allow any user access to any resource. 
+    - Presumably in reality we would limit users to only access their data but there is nothing in the spec about roles (admin can create users?) or details about how this should work
+                                                                                   
 
 # Setup
 
-1. I have committed the .env file to git which is probably insecure but it allows easy testing
+- I have committed the .env file to git which is probably insecure but it allows easy testing
     
-2. My app requires a database to be created called 'udacity_fsjs_project2'
+- My app requires a database to be created called 'udacity_fsjs_project2'
 
  - To buld and run the app
     
     - npm run build
     - npm run prod
 
-3. The unit tests will be run on a database called 'udacity_fsjs_project2_test'
+- The unit tests will be run on a database called 'udacity_fsjs_project2_test'
     
     - npm run test
     
-4. Both databases should belong to a user:
+- Both databases should belong to a user:
 
     - username: 'postgres_udacity'
     - password: 'p0stgres'
 
-Before running the app or tests please ensure those users exist.
+Before running the app or tests please ensure this user exists.
 
 
 
@@ -77,3 +81,8 @@ Before running the app or tests please ensure those users exist.
     - <ins><b>order_id</b></ins> integer foreign key references orders.id  - on delete cascade
     - <ins><b>product_id</b></ins> integer foreign key references products.id  - on delete cascade
         
+
+
+For details of the API please see <a href="./API.yaml">API.yaml</a>
+
+
