@@ -1,6 +1,6 @@
 import {Order, OrderStatus, OrderStore} from "../../src/models/order";
 import {Users, UsersStore} from "../../src/models/users";
-import {Product, ProductStore} from "../../src/models/product";
+import {CountedProduct, Product, ProductStore} from "../../src/models/product";
 import {testingUser} from "../api/helpers";
 
 describe("Test products in orders", ()=>{
@@ -105,21 +105,24 @@ describe("Test products in orders", ()=>{
         expect(orders[0].id).toEqual(orderIdsCreated[0]);
         expect(orders[1].id).toEqual(orderIdsCreated[1]);
 
-        const products0:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
+        const products0:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
 
         expect(products0.length).toEqual(1);
 
-        const products1:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[1]);
+        const products1:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[1]);
 
         expect(products1.length).toEqual(3);
+        expect(products1[0].quantity).toEqual(1);
+        expect(products1[1].quantity).toEqual(2);
+        expect(products1[2].quantity).toEqual(3);
     });
 
     it("delete an order and associated data", async()=>{
-        const products:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
+        const products:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
 
         expect(products.length).toEqual(1);
         await orderStore.deleteOrder(orderIdsCreated[0]);
-        const products2:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
+        const products2:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
 
         expect(products2.length).toEqual(0);
         const orders2:Order[] = await orderStore.getAllOrdersForUser(userIdCreated);
@@ -133,11 +136,11 @@ describe("Test products in orders", ()=>{
 
         expect(orders.length).toEqual(0);
 
-        const products0:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
+        const products0:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[0]);
 
         expect(products0.length).toEqual(0);
 
-        const products1:Product[] = await orderStore.getProductsForOrder(orderIdsCreated[1]);
+        const products1:CountedProduct[] = await orderStore.getProductsForOrder(orderIdsCreated[1]);
 
         expect(products1.length).toEqual(0);
 

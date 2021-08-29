@@ -35,7 +35,10 @@ describe("api", async () => {
         const user:Users = (response.body as Users);
         userIdCreated = user.id;
 
-        const response2 = await request.get("/api/orders/user/" + userIdCreated);
+        const response2 = await request
+            .get("/api/orders/user/" + userIdCreated)
+            .set('Authorization', 'Bearer ' + token);
+
         const orders:Order[] = (response2.body as Order[]);
 
         expect(orders.length).toEqual(0);
@@ -56,6 +59,7 @@ describe("api", async () => {
 
         const response3 = await request
             .post("/api/orders")
+            .set('Authorization', 'Bearer ' + token)
             .send({
                 status: OrderStatus.ACTIVE,
                 user_id:userIdCreated
@@ -64,13 +68,16 @@ describe("api", async () => {
         const order:Order = (response3.body as Order);
         orderIdCreated = order.id;
 
-        const response4 = await request.get("/api/orders/user/" + userIdCreated);
+        const response4 = await request
+            .get("/api/orders/user/" + userIdCreated)
+            .set('Authorization', 'Bearer ' + token);
         const orders2:Order[] = (response4.body as Order[]);
 
         expect(orders2.length).toEqual(1);
 
         const response5 = await request
-            .get("/api/orders/" + orderIdCreated + "/products");
+            .get("/api/orders/" + orderIdCreated + "/products")
+            .set('Authorization', 'Bearer ' + token);
 
         const products:Product[] = (response5.body as Product[]);
 
@@ -78,17 +85,20 @@ describe("api", async () => {
 
         await request
             .post("/api/orders/" + orderIdCreated + "/products")
+            .set('Authorization', 'Bearer ' + token)
             .send({
                 quantity:1,
                 product_id:productIdsCreated[0]
             });
 
         const response7 = await request
-            .get("/api/orders/" + orderIdCreated + "/products");
+            .get("/api/orders/" + orderIdCreated + "/products")
+            .set('Authorization', 'Bearer ' + token);
 
         const products2:Product[] = (response7.body as Product[]);
 
         expect(products2.length).toEqual(1);
+        expect(products2[0].name).toEqual("name1");
 
     });
 

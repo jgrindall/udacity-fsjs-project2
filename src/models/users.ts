@@ -4,7 +4,6 @@
 
 import client from "../database";
 import bcrypt from "bcrypt";
-import {Order} from "./order";
 
 export type Users = {
     id: number;
@@ -27,6 +26,11 @@ const SALT_ROUNDS: string = process.env.SALT_ROUNDS as string;
 
 export class UsersStore {
     constructor() {}
+
+    /**
+     * list all users.
+     * @returns {Promise<Users[]>}
+     */
     async index(): Promise<Users[]> {
         try {
             const connection = await client.connect();
@@ -39,6 +43,11 @@ export class UsersStore {
         }
     }
 
+    /**
+     * show one user
+     * @param id
+     * @return {Promise<Users>}
+     */
     async find(id: number): Promise<Users> {
         try {
             const connection = await client.connect();
@@ -51,6 +60,11 @@ export class UsersStore {
         }
     }
 
+    /**
+     * delete by id
+     * @param id
+     * @return {Promise<Users>} - the deleted user
+     */
     async delete(id: number): Promise<Users> {
         try {
             const connection = await client.connect();
@@ -63,6 +77,10 @@ export class UsersStore {
         }
     }
 
+    /**
+     * delete by id
+     * @return {Promise<Users>} - the deleted users
+     */
     async deleteAll(): Promise<Users[]> {
         try {
             const connection = await client.connect();
@@ -75,6 +93,11 @@ export class UsersStore {
         }
     }
 
+    /**
+     * create
+     * @param {Omit<Users, id>} user to create
+     * @return {Promise<Users>} - the created user
+     */
     async create(user: Omit<Users, "id">): Promise<Users> {
         try {
             validate(user);
@@ -89,6 +112,10 @@ export class UsersStore {
         }
     }
 
+    /**
+     * login. username = firstName + space + lastName
+     * @return {Promise<Users>} - the created user
+     */
     async authenticate(username: string, password: string): Promise<Users | null> {
         const names = username.split(" ");
         const sql = 'select * from users where "firstName" = $1 and "lastName" = $2';

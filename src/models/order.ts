@@ -1,5 +1,5 @@
 import client from "../database";
-import {Product} from "./product";
+import {CountedProduct} from "./product";
 
 /** orders can be in two states - active or complete **/
 
@@ -145,10 +145,10 @@ export class OrderStore {
         }
     }
 
-    async getProductsForOrder(order_id: number): Promise<Product[]> {
+    async getProductsForOrder(order_id: number): Promise<CountedProduct[]> {
         try {
             const sql =
-                "select p.id, p.name, p.price from order_products op join products p on op.product_id = p.id where order_id = $1";
+                "select p.id, p.name, p.price, op.quantity from order_products op join products p on op.product_id = p.id where order_id = $1";
             const connection = await client.connect();
             const result = await connection.query(sql, [order_id]);
             await connection.release();

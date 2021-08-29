@@ -25,10 +25,19 @@ describe("Test endpoint success", async () => {
     });
 
     it("test list", async () => {
-        const response = await request.get("/api/orders");
+        const response = await request
+            .get("/api/orders")
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
+    });
+
+    it("test list, fail auth", async () => {
+        const response = await request
+            .get("/api/orders");
+        expect(response.status).toBe(401);
+        expect(response.body).toBeNull();
     });
 
     it("test create - invalid format", async () => {
@@ -64,6 +73,7 @@ describe("Test endpoint success", async () => {
         };
         const response2 = await request
             .post("/api/orders")
+            .set('Authorization', 'Bearer ' + token)
             .send(order);
 
         expect(response2.status).toBe(200);
@@ -74,7 +84,9 @@ describe("Test endpoint success", async () => {
 
         orderIdCreated = order2.id;
 
-        const response3 = await request.get("/api/orders");
+        const response3 = await request
+            .get("/api/orders")
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response3.status).toBe(200);
         const orders = (response3.body as Order[]);
@@ -93,13 +105,16 @@ describe("Test endpoint success", async () => {
         };
         const response = await request
             .post("/api/orders")
+            .set('Authorization', 'Bearer ' + token)
             .send(order);
         expect(response.status).toBe(403);
         expect(response.body).toBeNull();
     });
 
     it("test get by id", async () => {
-        const response = await request.get("/api/orders/" + orderIdCreated);
+        const response = await request
+            .get("/api/orders/" + orderIdCreated)
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response.status).toBe(200);
         const order:Order = (response.body) as Order;
@@ -110,7 +125,9 @@ describe("Test endpoint success", async () => {
     });
 
     it("test get by user_id", async () => {
-        const response = await request.get("/api/orders/user/" + userIdCreated);
+        const response = await request
+            .get("/api/orders/user/" + userIdCreated)
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response.status).toBe(200);
         const orders:Order[] = (response.body) as Order[];
@@ -121,7 +138,9 @@ describe("Test endpoint success", async () => {
     });
 
     it("test get active by user_id", async () => {
-        const response = await request.get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.ACTIVE);
+        const response = await request
+            .get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.ACTIVE)
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response.status).toBe(200);
         const orders:Order[] = (response.body) as Order[];
@@ -132,7 +151,9 @@ describe("Test endpoint success", async () => {
 
 
 
-        const response2 = await request.get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.COMPLETE);
+        const response2 = await request
+            .get("/api/orders/user/" + userIdCreated + "/" + OrderStatus.COMPLETE)
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response2.status).toBe(200);
         const orders2:Order[] = (response2.body) as Order[];
@@ -143,12 +164,16 @@ describe("Test endpoint success", async () => {
 
     it("test cascade when user deleted", async () => {
         await userStore.delete(userIdCreated);
-        const response = await request.get("/api/orders");
+        const response = await request
+            .get("/api/orders")
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
 
-        const response2 = await request.get("/api/orders/user/" + userIdCreated);
+        const response2 = await request
+            .get("/api/orders/user/" + userIdCreated)
+            .set('Authorization', 'Bearer ' + token);
 
         expect(response2.status).toBe(200);
         const orders:Order[] = (response2.body) as Order[];

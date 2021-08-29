@@ -7,6 +7,8 @@ export type Product = {
     category: string;
 };
 
+export type CountedProduct  = Product & { quantity: number };
+
 const validate = (product:Omit<Product, "id">)=>{
     if(product.name && product.price && product.category){
         // ok
