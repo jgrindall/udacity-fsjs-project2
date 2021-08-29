@@ -94,3 +94,39 @@ See above (/api/orders/user/:user_id/complete)
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+
+
+
+
+# Database Schema:
+ 
+ - users
+    
+    - <ins><b>id</b></ins> integer primary key
+    - firstName varchar(64)
+    - lastName varchar(64)
+    - password varchar(1024) - encrypted password
+ 
+ 
+ - products
+
+    - <ins><b>id</b></ins> integer primary key
+    - name varchar(64)
+    - price integer
+    - category varchar(64)
+
+ 
+ - orders
+    
+    - <ins><b>id</b></ins> integer primary key
+    - status varchar(32)
+    - user_id foreign key references users.id - on delete cascade
+   
+ - order_products
+    
+    - <ins><b>id</b></ins> integer primary key
+    - quantity integer
+    - <ins><b>order_id</b></ins> integer foreign key references orders.id  - on delete cascade
+    - <ins><b>product_id</b></ins> integer foreign key references products.id  - on delete cascade
+        
