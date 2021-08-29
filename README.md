@@ -64,6 +64,11 @@ CREATE ROLE postgres_udacity WITH
 - See the file <a href="./udacity_fsjs_project2.postman_collection.json" target="_blank">udacity_fsjs_project2.postman_collection.json</a>
 
 
+# API
+
+
+For details of the API please see <a href="./API.yaml" target="_blank">API.yaml</a>
+
 
 # Database Schema:
  
@@ -98,6 +103,5 @@ CREATE ROLE postgres_udacity WITH
         
 
 
-For details of the API please see <a href="./API.yaml" target="_blank">API.yaml</a>
 
 
