@@ -41,7 +41,7 @@ I have made the following decisions:
 
 Before running the app or tests please ensure this user exists.
 
-I created my user in pgadmin (see <a href="./users.png">users.png</a>)
+I created my user in pgadmin (see <a href="./users.png target="_blank">users.png</a>)
 
 Alternatively, use the SQL
 
@@ -55,7 +55,7 @@ CREATE ROLE postgres_udacity WITH
 	NOREPLICATION
 	CONNECTION LIMIT -1
 	PASSWORD 'xxxxxx';
-
+```
 
 
 # Postman tests
