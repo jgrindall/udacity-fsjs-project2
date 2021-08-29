@@ -1,0 +1,393 @@
+/api/products/:
+    get:
+        description: list all available products
+        produces:
+            json
+        responses:
+            200:
+                description: OK
+    post:
+        description: add a product
+
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        requestBody:
+            name: string
+            price: string
+            category: string
+
+        produces:
+            json:
+                description: the created product
+                schema:
+                    id: number
+                    name: string
+                    price: number
+                    category: string
+
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+/api/products/:id:
+    get:
+        description: show a product
+        parameters:
+            id
+            description: id of product to return
+            required: true
+            type: integer
+
+
+
+
+
+
+/api/users:
+    get:
+        description: list users
+            security:
+                bearerAuth:
+                    name: Authorization
+                    in: header
+                    type: http
+                    scheme: bearer
+                    format: JWT
+    post:
+        description: create a user.
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        requestBody:
+            lastName: string
+            firstName: string
+            password: string
+
+
+        produces:
+            json:
+                description: the created user
+                schema:
+                    id: number
+                    lastName: string
+                    firstName: string
+                    password: string (encrypted)
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+
+/api/users/id:
+    get:
+        description: show a user
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            id
+            description: id of user to return
+            required: true
+            type: integer
+        produces:
+            json
+                description: the user
+                schema:
+                    id: number
+                    lastName: string
+                    firstName: string
+                    password: string (encrypted)
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+    delete:
+        description: delete a user
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            id:
+                description: id of user to delete
+                required: true
+                type: integer
+        produces:
+            json:
+                description: the user
+                schema:
+                    id: number
+                    lastName: string
+                    firstName: string
+                    password: string (encrypted)
+        responses:
+            200:
+                description: OK
+            401:
+                description:
+                    Unauthorised. JWT required
+
+/api/users/auth:
+    post:
+        description: log in
+        requestBody:
+            firstName:
+                type: string
+            lastName:
+                type: string
+            password:
+                type:string
+
+        produces:
+            json:
+                schema:
+                    access_token: string
+
+        responses:
+            200:
+                description: OK
+            401:
+                description: Failed login
+
+
+
+
+
+/api/orders:
+    get:
+        description: get all orders
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+        produces:
+            json:
+                description: array of orders
+                items:
+                    id: number
+                    status: string
+                    user_id: number
+        responses:
+            200:
+                description: OK
+            401:
+                description: Failed login
+
+
+    post:
+        description: add new order
+        requestBody:
+            status:
+                type: string
+            user_id:
+                type: integer
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+        produces:
+            json:
+                description: new order
+                schema:
+                    id: number
+                    status: string
+                    user_id: number
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised
+            403:
+                description: Badly formed order
+
+
+/api/orders/id:
+    get:
+        description: show an order
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            id:
+                description: id of order to show
+                required: true
+                type: integer
+        produces:
+            json:
+                description: the order
+                schema:
+                    id: number
+                    status: string
+                    user_id: number
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+/api/orders/user/:user_id:
+    get:
+        description: show all order for a user
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            user_id:
+                description: user_id of orders owner
+                required: true
+                type: integer
+        produces:
+            json :
+                description: array of orders
+                items:
+                    id: number
+                    status: string
+                    user_id: number
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+
+/api/orders/user/:user_id/:status:
+    get:
+        description: show all orders for a user by status
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            user_id:
+                description: user_id of orders owner
+                required: true
+                type: integer
+            status:
+                description: status of orders owner
+                required: true
+                type: string
+        produces:
+            json:
+                description: the orders
+                items:
+                    id: number
+                    status: string
+                    user_id: number
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+
+
+
+/api/orders/:id/products:
+    get:
+        description: show all products in an order
+        security:
+            bearerAuth:
+                name: Authorization
+                in: header
+                type: http
+                scheme: bearer
+                format: JWT
+
+        parameters:
+            order_id:
+                description: order_id of order
+                required: true
+                type: integer
+        produces:
+            json:
+                description: array of products and their counts
+                items:
+                    quantity: integer
+                    id: integer
+                    name: string
+                    price: integer
+
+        responses:
+            200:
+                description: OK
+            401:
+                description: Unauthorised. JWT required
+
+    post:
+        description: add product to order
+            security:
+                bearerAuth:
+                    name: Authorization
+                    in: header
+                    type: http
+                    scheme: bearer
+                    format: JWT
+
+            parameters:
+                order_id:
+                    description: order_id of order
+                    required: true
+                    type: integer
+            requestBody:
+                product_id:
+                    type: integer
+                quantity:
+                    type: integer
+            produces:
+                json:
+                    description: id of the corresponding row in order_products table
+                    id:
+                        integer
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorised. JWT required
+
+
+s
