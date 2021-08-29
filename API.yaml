@@ -263,7 +263,7 @@
 
 /api/orders/user/:user_id:
     get:
-        description: show all order for a user
+        description: show all orders for a user
         security:
             bearerAuth:
                 name: Authorization

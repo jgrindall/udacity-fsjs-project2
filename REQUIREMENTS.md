@@ -3,22 +3,77 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
+
+See <a href="./API.yaml" target="_blank">API.yaml</a> for more details.
+
 ## API Endpoints
 #### Products
 - Index 
+	
+	/api/products/:
+		get:
+			description: list all available products
+        
 - Show
+
+	/api/products/:id:
+		get:
+			description: show a product
+        
 - Create [token required]
+
+	/api/products/:
+		post:
+			description: create a product
+    
+	
+
 - [OPTIONAL] Top 5 most popular products 
 - [OPTIONAL] Products by category (args: product category)
 
 #### Users
 - Index [token required]
+
+	/api/users:
+		get:
+			description: list users
+
+
 - Show [token required]
+
+	/api/users/id:
+		get:
+			description: show a user
+
+
+
 - Create N[token required]
+
+	/api/users:
+		post:
+			description: create a user.
+       
 
 #### Orders
 - Current Order by user (args: user id)[token required]
+
+	/api/orders/user/:user_id/:status:
+		
+		get:
+			description: show all orders for a user by status
+
+		
+	Eg.
+		/api/orders/user/:user_id/active:
+		/api/orders/user/:user_id/complete:
+			
+
+
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
+
+See above (/api/orders/user/:user_id/complete)
+
+
 
 ## Data Shapes
 #### Product
