@@ -61,7 +61,7 @@ CREATE ROLE postgres_udacity WITH
 # Postman tests
 
 - I have included an export of Postman requests. 
-- See the file .../json
+- See the file <a href="./udacity_fsjs_project2.postman_collection.json" target="_blank">udacity_fsjs_project2.postman_collection.json</a>
 
 
 
@@ -98,6 +98,6 @@ CREATE ROLE postgres_udacity WITH
         
 
 
-For details of the API please see <a href="./API.yaml">API.yaml</a>
+For details of the API please see <a href="./API.yaml" target="_blank">API.yaml</a>
 
 
